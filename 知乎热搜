@@ -1,0 +1,23 @@
+#此代码可实现知乎热搜，但是需要在headers中添加cookie
+import requests
+from bs4 import BeautifulSoup
+
+
+def get_page(url, params=None, headers=None):
+    response = requests.get(url, headers=headers, params=params)
+    print(response.url)
+    page = BeautifulSoup(response.text, 'lxml')
+    print("响应状态码：", response.status_code)
+
+    return page
+
+headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74',
+        'Cookie': '****************************' #此处填写自己的Cookie
+        }
+page = get_page('https://www.zhihu.com/hot', headers=headers)
+div_list1 = page.find_all('div',class_='HotItem-content')
+
+for div in div_list1:
+     title1 = div.a.h2.text.strip()
+     print(title1)
