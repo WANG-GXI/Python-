@@ -1,3 +1,4 @@
+#此脚本可实时上传、获取onenet数据
 import json
 import time
 import requests
@@ -30,8 +31,8 @@ class Device:
 
 
 if __name__ == "__main__":
-    DeviceID = '652936501'  # 设备ID
-    ApiKey = 'RiplobQgl=D=XOnlhXyo=H8h7HM='  # APIKey管理中的默认APIKEY
+    DeviceID = '******'  # 填写自己的设备ID
+    ApiKey = '**********'  #填写自己的 APIKey管理中的默认APIKEY
     DataStreamName = 'TEMP'  # 数据流名称1
     DataStreamName2 = 'temp3'  # 数据流名称2
     device = Device(DeviceID, ApiKey)
