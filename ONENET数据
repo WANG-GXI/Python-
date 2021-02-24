@@ -1,0 +1,41 @@
+import json
+import time
+import requests
+
+
+class Device:
+    def __init__(self, DEVICEID, APIKEY):
+        self.DEVICEID = DEVICEID
+        self.APIKEY = APIKEY
+        self.url = 'http://api.heclouds.com/devices/%s/datapoints' % self.DEVICEID
+        self.headers = {"api-key": self.APIKEY, "Connection": "close"}
+    #上传数据
+    def upload_point(self, DataStreamName, VALUE):
+        dict = {"datastreams": [{"id": "id", "datapoints": [{"value": 0}]}]}
+        dict['datastreams'][0]['id'] = DataStreamName
+        dict['datastreams'][0]['datapoints'][0]['value'] = VALUE
+
+        if "succ" in requests.post(self.url, headers=self.headers, data=json.dumps(dict)).text:
+
+            print("Value:", VALUE, " has been uploaded to ", DataStreamName, " at ", time.ctime())
+
+    # 接收数据
+    def get_point(self, DataStreamName):
+        data = json.loads(requests.get(self.url, headers=self.headers, ).text)
+        for i in data['data']['datastreams']:
+            if i["id"] == DataStreamName:
+                return int(i['datapoints'][0]['value'])
+        else:
+            return "Not found DataStreamName - %s " % DataStreamName
+
+
+if __name__ == "__main__":
+    DeviceID = '652936501'  # 设备ID
+    ApiKey = 'RiplobQgl=D=XOnlhXyo=H8h7HM='  # APIKey管理中的默认APIKEY
+    DataStreamName = 'TEMP'  # 数据流名称1
+    DataStreamName2 = 'temp3'  # 数据流名称2
+    device = Device(DeviceID, ApiKey)
+    device.upload_point(DataStreamName,12)
+    print(device.get_point(DataStreamName),device.get_point(DataStreamName2))  # 查询数据流中的最新数据
+    
+    
